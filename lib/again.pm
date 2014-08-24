@@ -12,7 +12,7 @@ sub require_again {
     @_ >  1 and croak 'Too many arguments for require_again';
     my $module = shift;
     (my $file = "$module.pm") =~ s[::][/]g;
-    if (not exists $INC{$file} or -M $INC{$file} < $mtimes{$INC{$file}}) {
+    if (not exists $INC{$file} or not defined $INC{$file} or -M $INC{$file} < $mtimes{$INC{$file}}) {
         delete $INC{$file};
         require $file;
         $mtimes{$INC{$file}} = -M $INC{$file};
